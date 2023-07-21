@@ -47,9 +47,9 @@ public class BankAccount {
         }
 
         StringBuilder accountNumber = new StringBuilder();
-        boolean isValidCombination = generateAccountNumberMethod(digits, sum, accountNumber);
+        boolean isValidAccountNumber = generateAccountNumberMethod(digits, sum, accountNumber);
 
-        if (isValidCombination) {
+        if (isValidAccountNumber) {
             return accountNumber.toString();
         } else {
 
@@ -68,8 +68,8 @@ public class BankAccount {
         for (int digit = 9; digit >= 0; digit--) {
             if (sum - digit >= 0) {
                 accountNumber.append(digit);
-                boolean isValidCombination = generateAccountNumberMethod(digits - 1, sum - digit, accountNumber);
-                if (isValidCombination) {
+                boolean isValidAccountNumber = generateAccountNumberMethod(digits - 1, sum - digit, accountNumber);
+                if (isValidAccountNumber) {
                     return true;
                 }
                 accountNumber.deleteCharAt(accountNumber.length() - 1);

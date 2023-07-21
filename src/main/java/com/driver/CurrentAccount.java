@@ -1,5 +1,8 @@
 package com.driver;
 
+import java.util.HashMap;
+import java.util.PriorityQueue;
+
 public class CurrentAccount extends BankAccount{
     String tradeLicenseId; //consists of Uppercase English characters only
 
@@ -34,53 +37,43 @@ public class CurrentAccount extends BankAccount{
         // If the license Id is valid, do nothing
         // If the characters of the license Id can be rearranged to create any valid license Id
         // If it is not possible, throw "Valid License can not be generated" Exception
-
-        try {
-             tradeLicenseId = rearrangeLicenseId(tradeLicenseId);
-
-        } catch (Exception e) {
+        try{
+            tradeLicenseId=rearrangeLicenseId(tradeLicenseId);
+        }catch(Exception e){
             System.out.println(e.getMessage());
+
         }
+
+
 
     }
 
     public static String rearrangeLicenseId(String licenseId) throws Exception {
-        if (licenseId == null || licenseId.isEmpty()) {
-            throw new IllegalArgumentException("License ID must not be null or empty.");
+        StringBuilder ans=new StringBuilder();
+        HashMap<Character,Integer> hp=new HashMap<>();
+        for(char c:licenseId.toCharArray()){
+            hp.put(c,hp.getOrDefault(c,0)+1);
         }
+        PriorityQueue<Character> queue=new PriorityQueue<>((a,b)->hp.get(b)-hp.get(a));
+        queue.addAll(hp.keySet());
+        while(!queue.isEmpty()){
+            char topChar= queue.poll();
+            if(ans.length()>0 && ans.charAt(ans.length()-1)==topChar){
+                if(queue.isEmpty()) throw new Exception("Valid License can not be generated");
+                char topSecChar= queue.poll();
+                ans.append(topSecChar);
+                hp.put(topSecChar,hp.getOrDefault(topSecChar,0)-1);
+                if(hp.get(topSecChar)>0) queue.add(topSecChar);
 
-        // Check if the given licenseId is already valid
-        if (isValidLicenseId(licenseId)) {
-            return licenseId;
-        }
-
-        // Rearrange the licenseId to make it valid
-        char[] chars = licenseId.toCharArray();
-        for (int i = 1; i < chars.length; i += 2) {
-            if (chars[i] == chars[i - 1]) {
-                int j = i + 1;
-                while (j < chars.length && chars[j] == chars[i]) {
-                    j++;
-                }
-                if (j == chars.length) {
-                    throw new Exception("Valid License can not be generated");
-                }
-                char temp = chars[j];
-                chars[j] = chars[i];
-                chars[i] = temp;
             }
+            ans.append(topChar);
+            hp.put(topChar,hp.getOrDefault(topChar,0)-1);
+            if(hp.get(topChar)>0) queue.add(topChar);
         }
-        return new String(chars);
+        return ans.toString();
     }
 
-    private static boolean isValidLicenseId(String licenseId) {
-        for (int i = 1; i < licenseId.length(); i++) {
-            if (licenseId.charAt(i) == licenseId.charAt(i - 1)) {
-                return false;
-            }
-        }
-        return true;
-    }
+
 
     public String getTradeLicenseId() {
         return tradeLicenseId;
