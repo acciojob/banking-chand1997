@@ -36,7 +36,7 @@ public class CurrentAccount extends BankAccount{
         // If it is not possible, throw "Valid License can not be generated" Exception
 
         try {
-            String validLicenseId = rearrangeLicenseId(tradeLicenseId);
+             tradeLicenseId = rearrangeLicenseId(tradeLicenseId);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
