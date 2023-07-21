@@ -1,6 +1,7 @@
 package com.driver;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.PriorityQueue;
 
 public class CurrentAccount extends BankAccount{
@@ -38,6 +39,7 @@ public class CurrentAccount extends BankAccount{
         // If the characters of the license Id can be rearranged to create any valid license Id
         // If it is not possible, throw "Valid License can not be generated" Exception
         try{
+            if(check(tradeLicenseId))
             tradeLicenseId=rearrangeLicenseId(tradeLicenseId);
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -46,6 +48,12 @@ public class CurrentAccount extends BankAccount{
 
 
 
+    }
+    private boolean check(String license){
+        for(int i=1;i<license.length();i++){
+            if(license.charAt(i)==license.charAt(i-1)) return true;
+        }
+        return false;
     }
 
     public static String rearrangeLicenseId(String licenseId) throws Exception {
@@ -70,7 +78,7 @@ public class CurrentAccount extends BankAccount{
             hp.put(topChar,hp.getOrDefault(topChar,0)-1);
             if(hp.get(topChar)>0) queue.add(topChar);
         }
-        return ans.toString();
+        return ans.toString().toUpperCase();
     }
 
 
