@@ -42,10 +42,6 @@ public class BankAccount {
         //Generate account number having given number of 'digits' such that the sum of digits is equal to 'sum'
         //If it is not possible, throw "Account Number can not be generated" exception
 
-        if (digits <= 0  || sum < 0 || sum > digits * 9) {
-            throw new IllegalArgumentException("Invalid input parameters");
-        }
-
         StringBuilder accountNumber = new StringBuilder();
         boolean isValidAccountNumber = generateAccountNumberMethod(digits, sum, accountNumber);
 
@@ -56,11 +52,13 @@ public class BankAccount {
             throw new Exception("Account Number can not be generated");
         }
 
-//        return null;
     }
 
 
     private static boolean generateAccountNumberMethod(int digits, int sum, StringBuilder accountNumber) {
+        if (digits <= 0  || sum < 0 || sum > digits * 9) {
+            return false;
+        }
         if (digits == 0) {
             return sum == 0;
         }
