@@ -18,19 +18,13 @@ public class CurrentAccount extends BankAccount{
     }
 
     private void validateBalance() throws Exception {
-        try{
-            remainingBalance(getBalance());
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-
-    }
-
-    private void remainingBalance(double balance) throws Exception {
-        if(balance<5000){
+        if(getBalance()<5000){
             throw new Exception("Insufficient Balance");
         }
+
     }
+
+
 
 
     public void validateLicenseId() throws Exception {
@@ -38,23 +32,14 @@ public class CurrentAccount extends BankAccount{
         // If the license Id is valid, do nothing
         // If the characters of the license Id can be rearranged to create any valid license Id
         // If it is not possible, throw "Valid License can not be generated" Exception
-        try{
-            if(check(tradeLicenseId))
-            tradeLicenseId=rearrangeLicenseId(tradeLicenseId);
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-
+        if(rearrangeLicenseId(tradeLicenseId)==""){
+            throw new Exception("Valid License can not be generated");
         }
 
 
 
     }
-    private boolean check(String license){
-        for(int i=1;i<license.length();i++){
-            if(license.charAt(i)==license.charAt(i-1)) return true;
-        }
-        return false;
-    }
+
 
     public static String rearrangeLicenseId(String licenseId) throws Exception {
         StringBuilder ans=new StringBuilder();
@@ -67,7 +52,7 @@ public class CurrentAccount extends BankAccount{
         while(!queue.isEmpty()){
             char topChar= queue.poll();
             if(ans.length()>0 && ans.charAt(ans.length()-1)==topChar){
-                if(queue.isEmpty()) throw new Exception("Valid License can not be generated");
+                if(queue.isEmpty()) return "";
                 char topSecChar= queue.poll();
                 ans.append(topSecChar);
                 hp.put(topSecChar,hp.getOrDefault(topSecChar,0)-1);
